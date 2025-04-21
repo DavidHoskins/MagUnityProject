@@ -1,6 +1,6 @@
 class JsonAdaptor
 {
-    public Product[] Products { get; private set;}
-    public Bundle[] Bundles { get; private set; } 
+    public Product[] Products { get; set;}
+    public Bundle[] Bundles { get; set; } 
 
 }
