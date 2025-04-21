@@ -7,14 +7,14 @@ using Newtonsoft.Json;
 
 class ProductCatalogue
 {
-    private List<PurchasableItem> m_items = new List<PurchasableItem>();
+    private List<PurchasableItem> _items = new List<PurchasableItem>();
     public enum SortByType  {Price, Name, Description};
 
     public void Init(string jsonString)
     {
-        if (string.IsNullOrEmpty(jsonString))
+        if (jsonString == null)
         {
-            Debug.LogError("JSON string is null or empty.");
+            Debug.LogError("JSON string is null");
             return;
         }
         FromJson(jsonString);
@@ -38,11 +38,11 @@ class ProductCatalogue
         {
             if(jsonAdaptor.Bundles != null)
             {
-                m_items.AddRange(jsonAdaptor.Bundles);
+                _items.AddRange(jsonAdaptor.Bundles);
             }
             if (jsonAdaptor.Products != null)
             {
-                m_items.AddRange(jsonAdaptor.Products);
+                _items.AddRange(jsonAdaptor.Products);
             }
         }
     }
@@ -52,14 +52,14 @@ class ProductCatalogue
         switch (sortByType)
         {
             case SortByType.Name:
-                return ascending ? m_items.OrderBy(item => item.Name) : m_items.OrderBy(item => item.Name).Reverse();
+                return ascending ? _items.OrderBy(item => item.Name) : _items.OrderBy(item => item.Name).Reverse();
             case SortByType.Price:
-                return ascending ? m_items.OrderBy(item => item.Price) : m_items.OrderBy(item => item.Price).Reverse();
+                return ascending ? _items.OrderBy(item => item.Price) : _items.OrderBy(item => item.Price).Reverse();
             case SortByType.Description:
-                return ascending ? m_items.OrderBy(item => item.Description) : m_items.OrderBy(item => item.Description).Reverse();
+                return ascending ? _items.OrderBy(item => item.Description) : _items.OrderBy(item => item.Description).Reverse();
             default:
                 Debug.LogWarning("SortByType is undefined. Returning unsorted items.");
-                return m_items;
+                return _items;
         }
     }
 
@@ -68,14 +68,14 @@ class ProductCatalogue
         if (itemOrder.Length == 0)
         {
             Debug.LogWarning("No item order provided. Returning unsorted items.");
-            return m_items;
+            return _items;
         }
 
-        IOrderedEnumerable<PurchasableItem> sortedItems = m_items.OrderBy(item => { return sortItemsFunc(item, itemOrder); });
+        IOrderedEnumerable<PurchasableItem> sortedItems = _items.OrderBy(item => { return SortItemsFunc(item, itemOrder); });
         return sortedItems;
     }
 
-    private int sortItemsFunc(PurchasableItem item, params string[] itemOrder)
+    private int SortItemsFunc(PurchasableItem item, params string[] itemOrder)
     {
         // Sort for bundles
         if(item is Bundle bundle)
@@ -101,15 +101,15 @@ class ProductCatalogue
         if (filterItems.Length == 0)
         {
             Debug.LogWarning("No item order provided. Returning unsorted items.");
-            return m_items;
+            return _items;
         }
 
-        IEnumerable<PurchasableItem> filteredItems = m_items.Where(item => { return filterItemsFunc(item, filterItems); });
+        IEnumerable<PurchasableItem> filteredItems = _items.Where(item => { return FilterItemsFunc(item, filterItems); });
 
         return filteredItems;
     }
 
-    private bool filterItemsFunc(PurchasableItem item, params string[] filterItems)
+    private bool FilterItemsFunc(PurchasableItem item, params string[] filterItems)
     {
         if(item is Bundle bundle)
         {
@@ -125,12 +125,12 @@ class ProductCatalogue
 
     public IEnumerable<PurchasableItem> CustomFilterBy(Func<PurchasableItem, bool> filterFunc)
     {
-        return m_items.Where(filterFunc);
+        return _items.Where(filterFunc);
     }
 
     public IEnumerable<PurchasableItem> CustomSortBy(Func<PurchasableItem, object> sortFunc, bool ascending = true)
     {
-        IOrderedEnumerable<PurchasableItem> sortedItems = m_items.OrderBy(sortFunc);
+        IOrderedEnumerable<PurchasableItem> sortedItems = _items.OrderBy(sortFunc);
         return ascending ? sortedItems : sortedItems.Reverse();
     }
 }
