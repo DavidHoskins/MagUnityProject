@@ -100,7 +100,7 @@ class ProductCatalogue
     {
         if (filterItems.Length == 0)
         {
-            Debug.LogWarning("No item order provided. Returning unsorted items.");
+            Debug.LogWarning("No item order provided. Returning unfiltered items.");
             return _items;
         }
 
