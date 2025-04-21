@@ -1,4 +1,8 @@
 # MagUnityProject
+
+# Where to find lib code
+- Lib code can be found inside /Assets/Scripts/ProductCatalogue/
+- Sample code can be found inside /Assets/Scripts/
  
 # Prerequisites to run lib
 - Must be running Unity LTS 2022.3.53 (Download found here: https://unity.com/releases/editor/whats-new/2022.3.53)
