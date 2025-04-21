@@ -123,9 +123,9 @@ class ProductCatalogue
         return filterItems.Contains(item.Name);
     }
 
-    public IEnumerable<PurchasableItem> CustomFilterBy(Func<PurchasableItem, bool> filterFunc, bool ascending = true)
+    public IEnumerable<PurchasableItem> CustomFilterBy(Func<PurchasableItem, bool> filterFunc)
     {
-        return ascending ? m_items.Where(filterFunc) : m_items.Where(filterFunc).Reverse();
+        return m_items.Where(filterFunc);
     }
 
     public IEnumerable<PurchasableItem> CustomSortBy(Func<PurchasableItem, object> sortFunc, bool ascending = true)
